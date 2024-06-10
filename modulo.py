@@ -1,6 +1,7 @@
 import os
 import csv
 import random
+import json
 
 # ----------- CSV -----------------
 
@@ -39,13 +40,16 @@ def cargar_csv(nombre_archivo: str) -> list:
         print(f"Error: El archivo '{nombre_archivo}' no se encontró.") 
     return lista_posts
 
-def guardar_csv(lista, nombre_archivo):
+def guardar_csv(lista: list, nombre_archivo: str) -> csv:
     """
     Guarda una lista de diccionarios en un archivo CSV con el mismo formato que el original
     
     Args:
-        lista (list): Lista de diccionarios a guardar
-        nombre_archivo (str): Nombre del archivo CSV
+        lista (list): Lista de diccionarios a guardar en un CSV
+        nombre_archivo (str): Nombre del archivo CSV a guardar
+    
+    Returns:
+        csv: Un archivo CSV con los datos de la lista dada
     """
     ruta = get_path_actual(nombre_archivo)
 
@@ -58,11 +62,43 @@ def guardar_csv(lista, nombre_archivo):
 
     print(f"Archivo '{nombre_archivo}' guardado con éxito.")
 
+# ------------------- JSON --------------------------------
+
+def guardar_json(lista: list, nombre_archivo: str) -> json:
+    """
+    Guarda una lista de diccionarios en un archivo JSON
+
+    Args:
+        lista (list): Lista de diccionarios a guardar en un JSON
+        nombre_archivo (str): Nombre del archivo JSON a guardar
+
+    Returns:
+        json: Un archivo JSON con los datos de la lista dada.
+    """
+
+    ruta = get_path_actual(nombre_archivo)
+    
+    with open(ruta, "w", encoding = "utf-8") as archivo:
+
+        # Convertir el codigo Python en formato JSON
+        json.dump(lista, archivo, ensure_ascii=False, indent=4)
+
+    print(f"Archivo guardado en: {ruta}")
+
 # ----------------- MOSTRAR DATOS ----------------------------
 
 def imprimir_lista(lista):
-    for el in lista:
-        print(el)
+    print("LISTA")
+    print(f"{'ID':<20} {'USER':<20} {'LIKES':<30} {'DISLIKES':<30} {'FOLLOWERS':<40}")
+    print("-" * 140)
+    for dict in lista:
+        # Una vez q accedo al nivel del diccionario lo paso a otro funcion en donde voy por sus elementos
+        mostrar_datos(dict)
+
+def mostrar_datos(dict):
+    print(f"{dict['id']:<20} {dict['user']:<20} {dict['likes']:<30} {dict['dislikes']:<30} {dict['followers']:<40}")
+
+# ----------------- FUNCIONES --------------------------------
 
 def asignar_valores_aleatorios(lista):
     for el in lista:
@@ -106,3 +142,18 @@ def mas_popular(lista, clave, funcion):
             nuevo_dict_max = lista[i]
 
     return nuevo_dict_max
+
+def burbujeo(function, lista: list):
+    # Esto al no estar mapeando una lista, modifica la lista original.
+
+    tam = len(lista)
+    
+    for i in range(tam - 1):
+        for j in range(i + 1, tam):
+            # voy a recibir luego por la funcion lambda en x lo que esta en lista[i] y a ese diccionario que recibo le agrego ["user"], lo mismo con j
+            if function(lista[i], lista[j]):
+                # swap
+                aux = lista[i]
+                lista[i] = lista[j]
+                lista[j] = aux
+    return lista

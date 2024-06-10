@@ -27,8 +27,15 @@ Nota 3: Para ordenar se deberá utilizar los algoritmos de ordenamiento vistos e
 def main():
     print("""
         1. Cargar archivos CSV
-          
-          """)
+        2. Imprimir lista
+        3. Asignar estadísticas
+        4. Filtrar por mejores posts
+        5. Filtrar por haters
+        6. Informar promedio de followers
+        7. Ordenar los datos por nombre de user ascendente
+        8. Mostrar más popular
+        9. Salir
+        """)
     
     while True:
         opcion = int(input("Ingrese una opción: "))
@@ -52,18 +59,23 @@ def main():
             case 6:
                 promedio_followers = promedio(lista_modificada, "followers")
             case 7:
-                pass
+                lista_ordenada = burbujeo(lambda x, y: x["user"] > y["user"], lista_modificada)
+                nombre_archivo = input("Ingrese el nombre del archivo JSON: ")
+                guardar_json(lista_ordenada, nombre_archivo)
             case 8:
                 dict_mas_popular = mas_popular(lista_modificada, "likes", lambda a, b: a < b)
                 print(f"El usuario {dict_mas_popular["user"]} tiene el post mas likeado con {dict_mas_popular["likes"]}")
-
-
-
-
+            case 9:
+                print("Saliendo del programa.")
+                break
+            case _:
+                print("Opción no valida.")
 
 
 
 main()
+
+
 
 
 
