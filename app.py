@@ -37,41 +37,80 @@ def main():
         9. Salir
         """)
     
+    flag_csv_cargado = False
+    flag_datos_asignados = False
+
     while True:
         opcion = int(input("Ingrese una opción: "))
         match opcion:
             case 1:
                 nombre_archivo = input("Ingrese el nombre del archivo CSV: ")
                 lista_original = cargar_csv(nombre_archivo)
+                flag_csv_cargado = True
             case 2:
-                imprimir_lista(lista_original)
+                if flag_csv_cargado:
+                    imprimir_lista(lista_original)
+                else:
+                    print("Primero debe cargar el CSV.")
             case 3:
-                lista_modificada = asignar_valores_aleatorios(lista_original)
+                if flag_csv_cargado:
+                    lista_modificada = asignar_valores_aleatorios(lista_original)
+                    flag_datos_asignados = True
+                else:
+                    print("Primero debe cargar el CSV.")
             case 4:
-                nombre_archivo = input("Ingrese el nombre del archivo CSV de mejores posts: ")
-                # utilizo la lista nueva generada en el case 3 ()
-                lista_mejores_posts = filtrar_mejores_posts(lista_modificada)
-                guardar_csv(lista_mejores_posts, nombre_archivo)
+                if flag_csv_cargado:
+                    if flag_datos_asignados:
+                        nombre_archivo = input("Ingrese el nombre del archivo CSV de mejores posts: ")
+                        # utilizo la lista nueva generada en el case 3 ()
+                        lista_mejores_posts = filtrar_mejores_posts(lista_modificada)
+                        guardar_csv(lista_mejores_posts, nombre_archivo)
+                    else:
+                        print("Antes debe asignarle datos al CSV.")
+                else:
+                    print("Primero debe cargar el CSV.")
             case 5:
-                lista_haters = haters(lista_modificada, "dislikes", "likes")
-                nombre_archivo = input("Ingrese el nombre del archivo para los haters: ")
-                guardar_csv(lista_haters, nombre_archivo)
+                if flag_csv_cargado:
+                    if flag_datos_asignados:                
+                        lista_haters = haters(lista_modificada, "dislikes", "likes")
+                        nombre_archivo = input("Ingrese el nombre del archivo para los haters: ")
+                        guardar_csv(lista_haters, nombre_archivo)
+                    else:
+                        print("Antes debe asignarle datos al CSV.")
+                else:
+                    print("Primero debe cargar el CSV.")
             case 6:
-                promedio_followers = promedio(lista_modificada, "followers")
+                if flag_csv_cargado:
+                    if flag_datos_asignados:
+                        promedio_followers = promedio(lista_modificada, "followers")
+                    else:
+                        print("Antes debe asignarle datos al CSV.")
+                else:
+                    print("Primero debe cargar el CSV.")
             case 7:
-                lista_ordenada = burbujeo(lambda x, y: x["user"] > y["user"], lista_modificada)
-                nombre_archivo = input("Ingrese el nombre del archivo JSON: ")
-                guardar_json(lista_ordenada, nombre_archivo)
+                if flag_csv_cargado:
+                    if flag_datos_asignados:
+                        lista_ordenada = burbujeo(lambda x, y: x["user"] > y["user"], lista_modificada)
+                        nombre_archivo = input("Ingrese el nombre del archivo JSON: ")
+                        guardar_json(lista_ordenada, nombre_archivo)
+                    else:
+                        print("Antes debe asignarle datos al CSV.")
+                else:
+                    print("Primero debe cargar el CSV.")
             case 8:
-                dict_mas_popular = mas_popular(lista_modificada, "likes", lambda a, b: a < b)
-                print(f"El usuario {dict_mas_popular["user"]} tiene el post mas likeado con {dict_mas_popular["likes"]}")
+                if flag_csv_cargado:
+                    if flag_datos_asignados:
+                        dict_mas_popular = mas_popular(lista_modificada, "likes", lambda a, b: a < b)
+                        print(f"El usuario {dict_mas_popular["user"]} tiene el post mas likeado con {dict_mas_popular["likes"]}")
+                    else:
+                        print("Antes debe asignarle datos al CSV.")
+                else:
+                    print("Primero debe cargar el CSV.")
             case 9:
                 print("Saliendo del programa.")
                 break
             case _:
                 print("Opción no valida.")
-
-
 
 main()
 
