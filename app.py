@@ -63,7 +63,7 @@ def main():
                     if flag_datos_asignados:
                         nombre_archivo = input("Ingrese el nombre del archivo CSV de mejores posts: ")
                         # utilizo la lista nueva generada en el case 3 ()
-                        lista_mejores_posts = filtrar_mejores_posts(lista_modificada, lambda x: int(x["likes"]) > 2000)
+                        lista_mejores_posts = si_es_mayor_o_menor(lista_modificada, lambda el: int(el["likes"]) > 2000)
                         guardar_csv(lista_mejores_posts, nombre_archivo)
                     else:
                         print("Antes debe asignarle datos al CSV.")
@@ -72,7 +72,7 @@ def main():
             case 5:
                 if flag_csv_cargado:
                     if flag_datos_asignados:                
-                        lista_haters = haters(lista_modificada, "dislikes", "likes")
+                        lista_haters = si_es_mayor_o_menor(lista_modificada, lambda x: int(x["dislikes"]) > int(x["likes"]))
                         nombre_archivo = input("Ingrese el nombre del archivo para los haters: ")
                         guardar_csv(lista_haters, nombre_archivo)
                     else:
@@ -100,7 +100,7 @@ def main():
             case 8:
                 if flag_csv_cargado:
                     if flag_datos_asignados:
-                        dict_mas_popular = mas_popular(lista_modificada, "likes", lambda a, b: a < b)
+                        dict_mas_popular = max_or_min(lista_modificada, "likes", lambda a, b: a < b)
                         print(f"El usuario {dict_mas_popular["user"]} tiene el post mas likeado con {dict_mas_popular["likes"]}")
                     else:
                         print("Antes debe asignarle datos al CSV.")

@@ -98,7 +98,7 @@ def imprimir_lista(lista: list) -> None:
 def mostrar_datos(dict: dict) -> str:
     print(f"{dict['id']:<20} {dict['user']:<20} {dict['likes']:<30} {dict['dislikes']:<30} {dict['followers']:<40}")
 
-# ----------------- FUNCIONES --------------------------------
+# ----------------- FUNCIONES GENERALES --------------------------------
 
 def asignar_valores_aleatorios(lista: list) -> list:
     """ 
@@ -116,21 +116,29 @@ def asignar_valores_aleatorios(lista: list) -> list:
         el["followers"] = random.randint(10000, 20000)
     return lista
 
-def filtrar_mejores_posts(lista: list, funcion) -> list:
+def si_es_mayor_o_menor(lista: list, funcion) -> int:
+    """ Conseguir un valor que sea mayor o menor al segundo valor.
+
+    Args:
+        lista (list): Lista a mapear
+        funcion (_type_): Determina que un valor sea mayor o menor al segundo valor
+
+    Returns:
+        int: Retorna un entero > o < al segundo valor, según lo establecido en la función.
+    """
     lista_filtrada = []
     for el in lista:
         if funcion(el):
             lista_filtrada.append(el)
     return lista_filtrada
 
-def haters(lista, clave1, clave2):
-    lista_filtrada = []
-    for el in lista:
-        if int(el[clave1]) > int(el[clave2]):
-            lista_filtrada.append(el)
-    return lista_filtrada
+def promedio(lista: list, clave: str) -> None:
+    """ Establece un promedio de números en una lista de diccionarios.
 
-def promedio(lista, clave):
+    Args:
+        lista (list): Lista de diccionarios con los datos a usar.
+        clave (str): Clave que contiene un valor numérico
+    """
     suma = 0
     tam = len(lista)
     for el in range(tam):
@@ -139,7 +147,17 @@ def promedio(lista, clave):
     resultado_promedio = suma / tam
     print(f"El promedio de {clave} es: {resultado_promedio}")
 
-def mas_popular(lista, clave, funcion):
+def max_or_min(lista: list, clave: str, funcion) -> dict:
+    """ Calcula el maximo o minimo de una lista de diccionarios.
+
+    Args:
+        lista (list): Lista de diccionarios.
+        clave (str): Clave del diccionario para acceder al valor del elemento.
+        funcion (_type_): Compara un valor con otro estableciendo un > o <.
+
+    Returns:
+        dict: Retorna un diccionario con el valor maximo o minimo.
+    """
     # MAX OR MIN FUNCIONAL Y GENERAL
     nuevo_elemento_max = int(lista[0][clave])
     nuevo_dict_max = lista[0]
@@ -152,9 +170,18 @@ def mas_popular(lista, clave, funcion):
 
     return nuevo_dict_max
 
-def burbujeo(funcion, lista: list):
-    # Esto al no estar mapeando una lista, modifica la lista original.
+def burbujeo(funcion, lista: list) -> list:
+    """ Ordenar una lista en orden ascendente o descendente.
 
+    Args:
+        funcion (_type_): Compara dos valores establenciendo una condición > o < para determinar si el orden es asc o desc.
+        lista (list): Lista a ordenar.
+
+    Returns:
+        list: Retorna una lista con valores ordenados de manera ascendente o descendente.
+    """
+
+    # Esto al no estar mapeando una lista, modifica la lista original.
     tam = len(lista)
     
     for i in range(tam - 1):
