@@ -63,7 +63,7 @@ def main():
                     if flag_datos_asignados:
                         nombre_archivo = input("Ingrese el nombre del archivo CSV de mejores posts: ")
                         # utilizo la lista nueva generada en el case 3 ()
-                        lista_mejores_posts = filtrar_mejores_posts(lista_modificada)
+                        lista_mejores_posts = filtrar_mejores_posts(lista_modificada, lambda x: int(x["likes"]) > 2000)
                         guardar_csv(lista_mejores_posts, nombre_archivo)
                     else:
                         print("Antes debe asignarle datos al CSV.")
@@ -113,6 +113,10 @@ def main():
                 print("Opción no valida.")
 
 main()
+
+
+
+
 
 
 

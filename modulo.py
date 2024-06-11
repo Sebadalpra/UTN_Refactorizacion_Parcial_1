@@ -87,7 +87,7 @@ def guardar_json(lista: list, nombre_archivo: str) -> json:
 
 # ----------------- MOSTRAR DATOS ----------------------------
 
-def imprimir_lista(lista):
+def imprimir_lista(lista: list) -> None:
     print("LISTA")
     print(f"{'ID':<20} {'USER':<20} {'LIKES':<30} {'DISLIKES':<30} {'FOLLOWERS':<40}")
     print("-" * 140)
@@ -95,22 +95,31 @@ def imprimir_lista(lista):
         # Una vez q accedo al nivel del diccionario lo paso a otro funcion en donde voy por sus elementos
         mostrar_datos(dict)
 
-def mostrar_datos(dict):
+def mostrar_datos(dict: dict) -> str:
     print(f"{dict['id']:<20} {dict['user']:<20} {dict['likes']:<30} {dict['dislikes']:<30} {dict['followers']:<40}")
 
 # ----------------- FUNCIONES --------------------------------
 
-def asignar_valores_aleatorios(lista):
+def asignar_valores_aleatorios(lista: list) -> list:
+    """ 
+    Asigna una lista de valores a una lista de diccionarios.
+
+    Args:
+        lista (_type_): Lista de diccionarios a alterar.
+
+    Returns:
+        _type_: La lista con los datos modificados.
+    """
     for el in lista:
         el["likes"] = random.randint(300, 3000)
         el["dislikes"] = random.randint(300, 3500)
         el["followers"] = random.randint(10000, 20000)
     return lista
 
-def filtrar_mejores_posts(lista):
+def filtrar_mejores_posts(lista: list, funcion) -> list:
     lista_filtrada = []
     for el in lista:
-        if int(el["likes"]) > 2000:
+        if funcion(el):
             lista_filtrada.append(el)
     return lista_filtrada
 
@@ -131,7 +140,7 @@ def promedio(lista, clave):
     print(f"El promedio de {clave} es: {resultado_promedio}")
 
 def mas_popular(lista, clave, funcion):
-    # ESTO ES UN MAX OR MIN FUNCIONAL Y GENERAL
+    # MAX OR MIN FUNCIONAL Y GENERAL
     nuevo_elemento_max = int(lista[0][clave])
     nuevo_dict_max = lista[0]
     tam = len(lista)
@@ -143,7 +152,7 @@ def mas_popular(lista, clave, funcion):
 
     return nuevo_dict_max
 
-def burbujeo(function, lista: list):
+def burbujeo(funcion, lista: list):
     # Esto al no estar mapeando una lista, modifica la lista original.
 
     tam = len(lista)
@@ -151,7 +160,7 @@ def burbujeo(function, lista: list):
     for i in range(tam - 1):
         for j in range(i + 1, tam):
             # voy a recibir luego por la funcion lambda en x lo que esta en lista[i] y a ese diccionario que recibo le agrego ["user"], lo mismo con j
-            if function(lista[i], lista[j]):
+            if funcion(lista[i], lista[j]):
                 # swap
                 aux = lista[i]
                 lista[i] = lista[j]
