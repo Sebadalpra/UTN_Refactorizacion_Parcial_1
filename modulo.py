@@ -18,29 +18,37 @@ def get_path_actual(nombre_archivo: str) -> str:
     directorio_actual = os.path.dirname(__file__)
     return os.path.join(directorio_actual, nombre_archivo)
 
-def cargar_csv(nombre_archivo: str) -> list:
-    """
-    Carga un archivo CSV en una lista de diccionarios
-    
-    Args:
-        nombre_archivo (str): Nombre del archivo CSV a cargar
-        
-    Returns:
-        list: Lista de diccionarios con los datos del CSV
-    """
-    ruta = get_path_actual(nombre_archivo)
-    lista_posts = []
-    try:
-        with open(ruta, mode="r", encoding="utf-8") as archivo:
-            lector = csv.DictReader(archivo)
-            for fila in lector:
-                lista_posts.append(fila)
-        print("Archivo cargado con éxito.")
-    except FileNotFoundError:
-        print(f"Error: El archivo '{nombre_archivo}' no se encontró.") 
+def cargar_csv(nombre_archivo: str):
+    ruta = get_path_actual(nombre_archivo + ".csv")
+    with open(ruta) as archivo:
+        lista_posts = []
+
+        # Encabezado en lista
+
+        encabezado = archivo.readline().strip("\n").split(",")
+
+        # Contenido en lista
+        for linea in archivo.readlines():
+
+            dict_posts = {}
+
+            linea = linea.strip("\n").split(",")
+
+            # Asigna cada valor de la lista linea a las variables id, nombre, apellido, edad, correo y direccion.
+            id,user,likes,dislikes,followers = linea
+
+            dict_posts["id"] = int(id)
+            dict_posts["user"] = user
+            dict_posts["likes"] = int(likes)
+            dict_posts["dislikes"] = int(dislikes)
+            dict_posts["followers"] = int(followers)
+            lista_posts.append(dict_posts)
+
+    print(f"Archivo {nombre_archivo} cargado con éxito.")
+
     return lista_posts
 
-def guardar_csv(lista: list, nombre_archivo: str) -> csv:
+def guardar_csv(lista, nombre_archivo) -> csv:
     """
     Guarda una lista de diccionarios en un archivo CSV con el mismo formato que el original
     
@@ -52,15 +60,24 @@ def guardar_csv(lista: list, nombre_archivo: str) -> csv:
         csv: Un archivo CSV con los datos de la lista dada
     """
     ruta = get_path_actual(nombre_archivo)
+    with open(ruta, "w", encoding="utf-8") as archivo_modificado:
+        dato = csv.writer(archivo_modificado)
 
-    with open(ruta, "w", newline="", encoding="utf-8") as archivo:
+        # ESCRIBO EL ENCABEZADO
         encabezado = ['id', 'user', 'likes', 'dislikes', 'followers']
-        esbribir_csv = csv.DictWriter(archivo, fieldnames=encabezado)
-        esbribir_csv.writeheader()
-        for post in lista:
-            esbribir_csv.writerow(post)
+        dato.writerow(encabezado)
 
-    print(f"Archivo '{nombre_archivo}' guardado con éxito.")
+        # Que hay dentro de lista? diccionarios, entonces recorro cada uno de ellos usando dict_persona y se agregan como campos
+        for dict_post in lista:
+            dato.writerow([
+                dict_post["id"],
+                dict_post["user"],
+                dict_post["likes"],
+                dict_post["dislikes"],
+                dict_post["followers"],
+                ])
+
+    print(f"Archivo modificado se encuntra en: {ruta}")
 
 # ------------------- JSON --------------------------------
 
@@ -76,7 +93,7 @@ def guardar_json(lista: list, nombre_archivo: str) -> json:
         json: Un archivo JSON con los datos de la lista dada.
     """
 
-    ruta = get_path_actual(nombre_archivo)
+    ruta = get_path_actual(nombre_archivo + ".json")
     
     with open(ruta, "w", encoding = "utf-8") as archivo:
 
@@ -92,7 +109,6 @@ def imprimir_lista(lista: list) -> None:
     print(f"{'ID':<20} {'USER':<20} {'LIKES':<30} {'DISLIKES':<30} {'FOLLOWERS':<40}")
     print("-" * 140)
     for dict in lista:
-        # Una vez q accedo al nivel del diccionario lo paso a otro funcion en donde voy por sus elementos
         mostrar_datos(dict)
 
 def mostrar_datos(dict: dict) -> str:
@@ -100,21 +116,19 @@ def mostrar_datos(dict: dict) -> str:
 
 # ----------------- FUNCIONES GENERALES --------------------------------
 
-def asignar_valores_aleatorios(lista: list) -> list:
+def asignar_valores_aleatorios(posts: list) -> None:
     """ 
     Asigna una lista de valores a una lista de diccionarios.
 
     Args:
         lista (_type_): Lista de diccionarios a alterar.
-
-    Returns:
-        _type_: La lista con los datos modificados.
     """
-    for el in lista:
+    for el in posts:
         el["likes"] = random.randint(300, 3000)
         el["dislikes"] = random.randint(300, 3500)
         el["followers"] = random.randint(10000, 20000)
-    return lista
+
+    print(f"Valores asignados correctamente")
 
 def si_es_mayor_o_menor(lista: list, funcion) -> int:
     """ Conseguir un valor que sea mayor o menor al segundo valor.
@@ -176,9 +190,6 @@ def burbujeo(funcion, lista: list) -> list:
     Args:
         funcion (_type_): Compara dos valores establenciendo una condición > o < para determinar si el orden es asc o desc.
         lista (list): Lista a ordenar.
-
-    Returns:
-        list: Retorna una lista con valores ordenados de manera ascendente o descendente.
     """
 
     # Esto al no estar mapeando una lista, modifica la lista original.
@@ -192,4 +203,5 @@ def burbujeo(funcion, lista: list) -> list:
                 aux = lista[i]
                 lista[i] = lista[j]
                 lista[j] = aux
+
     return lista

@@ -44,8 +44,7 @@ def main():
         opcion = int(input("Ingrese una opción: "))
         match opcion:
             case 1:
-                nombre_archivo = input("Ingrese el nombre del archivo CSV: ")
-                lista_original = cargar_csv(nombre_archivo)
+                lista_original = cargar_csv("posts")
                 flag_csv_cargado = True
             case 2:
                 if flag_csv_cargado:
@@ -54,7 +53,7 @@ def main():
                     print("Primero debe cargar el CSV.")
             case 3:
                 if flag_csv_cargado:
-                    lista_modificada = asignar_valores_aleatorios(lista_original)
+                    asignar_valores_aleatorios(lista_original)
                     flag_datos_asignados = True
                 else:
                     print("Primero debe cargar el CSV.")
@@ -62,8 +61,7 @@ def main():
                 if flag_csv_cargado:
                     if flag_datos_asignados:
                         nombre_archivo = input("Ingrese el nombre del archivo CSV de mejores posts: ")
-                        # utilizo la lista nueva generada en el case 3 ()
-                        lista_mejores_posts = si_es_mayor_o_menor(lista_modificada, lambda el: int(el["likes"]) > 2000)
+                        lista_mejores_posts = si_es_mayor_o_menor(lista_original, lambda el: int(el["likes"]) > 2000)
                         guardar_csv(lista_mejores_posts, nombre_archivo)
                     else:
                         print("Antes debe asignarle datos al CSV.")
@@ -72,7 +70,7 @@ def main():
             case 5:
                 if flag_csv_cargado:
                     if flag_datos_asignados:                
-                        lista_haters = si_es_mayor_o_menor(lista_modificada, lambda x: int(x["dislikes"]) > int(x["likes"]))
+                        lista_haters = si_es_mayor_o_menor(lista_original, lambda el: int(el["dislikes"]) > int(el["likes"]))
                         nombre_archivo = input("Ingrese el nombre del archivo para los haters: ")
                         guardar_csv(lista_haters, nombre_archivo)
                     else:
@@ -82,7 +80,7 @@ def main():
             case 6:
                 if flag_csv_cargado:
                     if flag_datos_asignados:
-                        promedio_followers = promedio(lista_modificada, "followers")
+                        promedio(lista_original, "followers")
                     else:
                         print("Antes debe asignarle datos al CSV.")
                 else:
@@ -90,7 +88,7 @@ def main():
             case 7:
                 if flag_csv_cargado:
                     if flag_datos_asignados:
-                        lista_ordenada = burbujeo(lambda x, y: x["user"] > y["user"], lista_modificada)
+                        lista_ordenada = burbujeo(lambda post1, post2: post1["user"] > post2["user"], lista_original)
                         nombre_archivo = input("Ingrese el nombre del archivo JSON: ")
                         guardar_json(lista_ordenada, nombre_archivo)
                     else:
@@ -100,7 +98,7 @@ def main():
             case 8:
                 if flag_csv_cargado:
                     if flag_datos_asignados:
-                        dict_mas_popular = max_or_min(lista_modificada, "likes", lambda a, b: a < b)
+                        dict_mas_popular = max_or_min(lista_original, "likes", lambda like1, like2: like1 < like2)
                         print(f"El usuario {dict_mas_popular["user"]} tiene el post mas likeado con {dict_mas_popular["likes"]}")
                     else:
                         print("Antes debe asignarle datos al CSV.")
@@ -113,45 +111,3 @@ def main():
                 print("Opción no valida.")
 
 main()
-
-
-
-
-
-
-
-
-
-
-
-""" 
-            case "1":
-                nombre_archivo = input("Ingrese el nombre del archivo CSV: ")
-                lista_posts = modulo.cargar_csv(nombre_archivo)
-            case "2":
-                modulo.imprimir_lista(lista_posts)
-            case "3":
-                lista_posts = modulo.asignar_estadisticas(lista_posts)
-
-                En case 1 cargo el csv en la variable lista_post
-                luego en case 3 asigno nuevas valores y piso la variable anterior lista_post con lo cual estoy reemplazando los valores
-                Estos valores reemplazados no se van a ver reflejados en el orignial (posts.csv), ya que para eso deberia entrar al case 4 y guardar el csv con el mismo nombre que el archivo original, es decir posts.csv en ese caso reemplazaria sus valores
-
-                # en el case 2 no se ve como una lista de diccionarios ya que recorri esa lista con imprimir_lista
-
-                # sin embargo, trabajo con una lista de diccionarios
-                Por ello tengo que hacer siempre for post in lista (para acceder uno x uno a cada diccionario de la lista
-                Entonces Ej. post["likes"]) -> accedo a los likes, es decir su valor a traves de su clave
-
-
-
-                # EXPLICACION SOBRE PORQUE SE GENERA DESDE UN PRINCIPIO UNA LISTA DE DICCIONARIOS:
-                SECCION DE CARGAR_CSV
-
-                with open(ruta, mode="r", encoding="utf-8") as archivo:
-                    lector = csv.DictReader(archivo)
-                    for fila in lector:
-                        lista_posts.append(fila)
-
-                Aquí, el archivo CSV se abre en modo lectura (mode="r") con codificación UTF-8. csv.DictReader se usa para leer el archivo CSV y convertir cada fila en un diccionario. Cada fila del CSV se añade a la lista lista_posts.
-"""
