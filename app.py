@@ -54,7 +54,7 @@ def main():
                     print("Primero debe cargar el CSV.")
             case 3:
                 if flag_csv_cargado:
-                    lista_modificada = asignar_valores_aleatorios(lista_original)
+                    asignar_valores_aleatorios(lista_original)
                     flag_datos_asignados = True
                 else:
                     print("Primero debe cargar el CSV.")
@@ -62,8 +62,7 @@ def main():
                 if flag_csv_cargado:
                     if flag_datos_asignados:
                         nombre_archivo = input("Ingrese el nombre del archivo CSV de mejores posts: ")
-                        # utilizo la lista nueva generada en el case 3 ()
-                        lista_mejores_posts = si_es_mayor_o_menor(lista_modificada, lambda el: int(el["likes"]) > 2000)
+                        lista_mejores_posts = si_es_mayor_o_menor(lista_original, lambda el: int(el["likes"]) > 2000)
                         guardar_csv(lista_mejores_posts, nombre_archivo)
                     else:
                         print("Antes debe asignarle datos al CSV.")
@@ -72,7 +71,7 @@ def main():
             case 5:
                 if flag_csv_cargado:
                     if flag_datos_asignados:                
-                        lista_haters = si_es_mayor_o_menor(lista_modificada, lambda x: int(x["dislikes"]) > int(x["likes"]))
+                        lista_haters = si_es_mayor_o_menor(lista_original, lambda el: int(el["dislikes"]) > int(el["likes"]))
                         nombre_archivo = input("Ingrese el nombre del archivo para los haters: ")
                         guardar_csv(lista_haters, nombre_archivo)
                     else:
@@ -82,7 +81,7 @@ def main():
             case 6:
                 if flag_csv_cargado:
                     if flag_datos_asignados:
-                        promedio_followers = promedio(lista_modificada, "followers")
+                        promedio(lista_original, "followers")
                     else:
                         print("Antes debe asignarle datos al CSV.")
                 else:
@@ -90,7 +89,7 @@ def main():
             case 7:
                 if flag_csv_cargado:
                     if flag_datos_asignados:
-                        lista_ordenada = burbujeo(lambda x, y: x["user"] > y["user"], lista_modificada)
+                        lista_ordenada = burbujeo(lambda post1, post2: post1["user"] > post2["user"], lista_original)
                         nombre_archivo = input("Ingrese el nombre del archivo JSON: ")
                         guardar_json(lista_ordenada, nombre_archivo)
                     else:
@@ -100,7 +99,7 @@ def main():
             case 8:
                 if flag_csv_cargado:
                     if flag_datos_asignados:
-                        dict_mas_popular = max_or_min(lista_modificada, "likes", lambda a, b: a < b)
+                        dict_mas_popular = max_or_min(lista_original, "likes", lambda like1, like2: like1 < like2)
                         print(f"El usuario {dict_mas_popular["user"]} tiene el post mas likeado con {dict_mas_popular["likes"]}")
                     else:
                         print("Antes debe asignarle datos al CSV.")
