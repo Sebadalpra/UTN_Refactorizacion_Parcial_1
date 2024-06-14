@@ -16,7 +16,8 @@ posts donde la cantidad de dislikes supere a la de likes.
 ordenado guardarlo en un archivo en formato JSON.
 8) Mostrar más popular: Informar el nombre del user o users con el posteo más likeado. Y cuál es
 ese número.
-9) Salir.
+9) Cargar archivo Json e imprimir los datos
+10) Salir.
 Requerimientos del desarrollo.
 Nota 1: Todas las funciones deben estar en un módulo distinto al programa principal
 y respetar las reglas de estilo de la cátedra.
@@ -104,7 +105,11 @@ def main():
                         print("Antes debe asignarle datos al CSV.")
                 else:
                     print("Primero debe cargar el CSV.")
-            case 9:
+            case 9: #Cargar archivo Json e imprimir los datos
+                nombre_archivo = input("Ingrese el nombre del archivo JSON: ")
+                archivo_json = cargar_json(nombre_archivo)
+                imprimir_lista(archivo_json)
+            case 10:
                 print("Saliendo del programa.")
                 break
             case _:

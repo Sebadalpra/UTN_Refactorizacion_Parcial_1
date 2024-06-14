@@ -81,6 +81,21 @@ def guardar_csv(lista, nombre_archivo) -> csv:
 
 # ------------------- JSON --------------------------------
 
+def cargar_json(nombre_archivo):
+
+    ruta = get_path_actual(nombre_archivo + ".json")
+
+    with open(ruta,"r",encoding = "utf-8") as archivo:
+
+        # Verifico que haya abierto. Si está en false es porque aun no se cerró
+        print(f"{archivo.closed}")   
+
+        # Cargo el archivo que hace referencia a la ruta y lo guardo en la variable.
+        # Me genera una lista de diccionarios.
+        posts_json = json.load(archivo)
+
+    return posts_json
+
 def guardar_json(lista: list, nombre_archivo: str) -> json:
     """
     Guarda una lista de diccionarios en un archivo JSON
